@@ -228,11 +228,11 @@ table.tbl td:first-child { font-weight: 800; color: var(--navy); }
 .lt { width: 1.6em; height: 1.6em; border-radius: 50%; display: inline-grid; place-items: center; color: #fff; background: var(--c); font-size: .9em; flex-shrink: 0; }
 
 /* qayta yozish (fe → __) */
-.rw { display: flex; flex-direction: column; gap: .35em; }
-.rw__row { display: flex; align-items: center; gap: .7em; background: #fff; border: .25mm solid var(--c-line); border-radius: 1.4mm; padding: .2em .7em; font-size: 1.12em; font-weight: 800; color: var(--navy); }
-.rw__src { min-width: 2.6em; }
+.rw { display: grid; grid-template-columns: auto auto auto 1fr; row-gap: .35em; }
+.rw__row { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; align-items: center; column-gap: .7em; background: #fff; border: .25mm solid var(--c-line); border-radius: 1.4mm; padding: .2em .7em; font-size: 1.12em; font-weight: 800; color: var(--navy); }
+.rw__src { min-width: 2.6em; white-space: nowrap; }
 .rw__row .arr { color: #1667e3; }
-.rw__box { flex: 1; height: 1.5em; border: .3mm solid #9cc2ef; border-radius: 1.2mm; }
+.rw__box { min-width: 3em; height: 1.5em; border: .3mm solid #9cc2ef; border-radius: 1.2mm; }
 
 /* to‘g‘ri / noto‘g‘ri */
 .tf { display: flex; flex-direction: column; gap: .3em; }

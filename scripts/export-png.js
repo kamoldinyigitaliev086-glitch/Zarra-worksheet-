@@ -5,7 +5,7 @@
  *   node scripts/export-png.js lessons/*.js --out output --dpi 300 --pdf
  *
  * Har bir dars uchun: <slug>-1.png (nazariya), <slug>-2.png (mashqlar).
- * --strict : matn sig‘magan yoki rasm topilmagan bo‘lsa xato bilan tugaydi (kod 2).
+ * --strict : matn sig‘magan, rasm topilmagan yoki mashq soni 5 emas bo‘lsa xato bilan tugaydi (kod 2).
  */
 const path = require("path");
 const fs = require("fs");
@@ -55,9 +55,10 @@ function parseArgs(argv) {
       failed = true; await page.close(); continue;
     }
 
-    const { report, missing, slug } = await page.evaluate(() => ({
+    const { report, missing, warnings, slug } = await page.evaluate(() => ({
       report: window.ZARRA.report,
       missing: window.ZARRA.missing || [],
+      warnings: window.ZARRA.warnings || [],
       slug: (window.ZARRA.data.meta && window.ZARRA.data.meta.slug) || null,
     }));
     const name = slug || path.basename(file, path.extname(file));
@@ -79,6 +80,8 @@ function parseArgs(argv) {
       console.log(`  ✓ ${path.relative(process.cwd(), p)}`);
     }
 
+    warnings.forEach(w => console.warn(`  ⚠ ${w}`));
+    if (warnings.length && opt.strict) failed = true;
     if (missing.length) {
       console.warn(`  ⚠ rasm topilmadi: ${missing.map(u => decodeURIComponent(u.replace(/^file:\/\//, ""))).join(", ")}`);
       if (opt.strict) failed = true;

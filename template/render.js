@@ -30,6 +30,8 @@
       .replace(/\^([0-9]*[+\-−]?)/g, (m, g) => (g ? "<sup>" + g + "</sup>" : m))
       .replace(/\n/g, "<br>");
   }
+  // Bo‘sh joyli qator: matn bo‘laklari <span> ichida, ___ — cho‘ziluvchi chiziq
+  const inlineRow = s => String(s ?? "").split(/_{3,}/).map(seg => seg.trim() ? `<span>${fmt(seg)}</span>` : "").join('<span class="blank"></span>');
   const paras = t => arr(t).map(p => `<p>${fmt(p)}</p>`).join("");
   const pick = (list, i) => list[i % list.length];
   function url(p) {
@@ -157,7 +159,7 @@
     const col = c.color || pick(CARD_COLORS, i);
     const text = (c.text || c.list)
       ? `<div class="card__text"${c.align || b.align ? ` style="--align:${c.align || b.align}"` : ""}>${paras(c.text)}${c.list ? `<ul>${arr(c.list).map(x => `<li>${fmt(x)}</li>`).join("")}</ul>` : ""}</div>` : "";
-    const box = c.box ? `<div class="card__box${c.boxBig ? " big" : ""}">${fmt(c.box)}</div>` : "";
+    const box = c.box ? `<div class="card__box${c.boxBig ? " big" : ""}"><span>${fmt(c.box)}</span></div>` : "";
     const img = c.img !== undefined ? ph(c.img, c) : "";
     let inner;
     if (c.imgSide === "right") {
@@ -183,7 +185,7 @@
       const nb = numbered ? `<span class="nb">${i + 1}</span>` : "";
       const s = String(p ?? "");
       if (!s) return `<div class="prow">${nb}<span class="blank"></span></div>`;
-      if (/_{3,}/.test(s)) return `<div class="prow">${nb}${fmt(s)}</div>`;
+      if (/_{3,}/.test(s)) return `<div class="prow">${nb}${inlineRow(s)}</div>`;
       return `<div class="prow">${nb}<span>${fmt(s)}</span></div><div class="prow">${pad}<span class="blank"></span></div>`;
     }).join("");
   }
@@ -203,8 +205,8 @@
     match(e) {
       const L = arr(e.left), R = arr(e.right);
       return `<div class="match">
-        <div class="match__col">${L.map((x, i) => `<div class="mrow"><span class="mleft"><span>${i + 1}.</span>${fmt(x)}</span><i class="sq"></i></div>`).join("")}</div>
-        <div class="match__col">${R.map((x, i) => `<div class="mright"><span class="lt c-${pick(LETTER_COLORS, i)}">${LETTERS[i]}</span>${fmt(x)}</div>`).join("")}</div>
+        <div class="match__col">${L.map((x, i) => `<div class="mrow"><span class="mleft"><span>${i + 1}.</span><span>${fmt(x)}</span></span><i class="sq"></i></div>`).join("")}</div>
+        <div class="match__col">${R.map((x, i) => `<div class="mright"><span class="lt c-${pick(LETTER_COLORS, i)}">${LETTERS[i]}</span><span>${fmt(x)}</span></div>`).join("")}</div>
       </div>`;
     },
 
@@ -264,7 +266,7 @@
       }).join("");
     },
 
-    fill: e => `<div class="fill-list">${arr(e.items).map((s, i) => `<div class="prow"><span class="nb">${i + 1}</span>${fmt(s)}</div>`).join("")}</div>`,
+    fill: e => `<div class="fill-list">${arr(e.items).map((s, i) => `<div class="prow"><span class="nb">${i + 1}</span>${inlineRow(s)}</div>`).join("")}</div>`,
 
     lines: e => `<div class="lines" style="--n:${e.lines || 4}"></div>`,
   };
@@ -364,7 +366,9 @@
     const m = data.meta || {};
     const root = document.getElementById("sheet");
     const exCount = arr(data.exercises).flat().filter(e => e.number !== false).length;
-    if (exCount !== 5) console.warn(`[ZARRA] 2-sahifa 5 ta mashq uchun mo‘ljallangan, berilgan: ${exCount}`);
+    const warnings = [];
+    if (exCount !== 5) warnings.push(`2-sahifa 5 ta mashq uchun mo‘ljallangan, berilgan: ${exCount}`);
+    warnings.forEach(w => console.warn("[ZARRA] " + w));
 
     root.innerHTML = page(m, 1, stack(data.theory, "sec")) + page(m, 2, stack(data.exercises, "ex"));
     document.title = `ZARRA · ${m.lessonNo ?? ""}-dars · ${String(m.topic || "").replace(/[*_^{}]/g, "")}`;
@@ -386,6 +390,7 @@
 
     window.ZARRA.report = report;
     window.ZARRA.missing = missing;
+    window.ZARRA.warnings = warnings;
     window.ZARRA.data = data;
     document.dispatchEvent(new CustomEvent("zarra:ready", { detail: report }));
     document.body.dataset.ready = "1";
