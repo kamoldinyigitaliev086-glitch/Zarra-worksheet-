@@ -4,9 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ZARRA · Kimyo worksheet</title>
+  <link rel="icon" href="data:,">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;500;700;800;900&family=Poppins:wght@600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -23,12 +24,14 @@
   <script src="render.js"></script>
   <script>
     /* Dars faylini tanlash:  worksheet.html?lesson=../lessons/02-mavzu.js
-       Parametrsiz ochilsa — namunaviy dars yuklanadi. */
+       Parametrsiz ochilsa — namunaviy 8-dars yuklanadi. */
     (function () {
       var p = new URLSearchParams(location.search);
       if (p.has("export")) document.body.classList.add("export-mode");
       var s = document.createElement("script");
-      s.src = p.get("lesson") || "../lessons/01-atom-va-molekula.js";
+      s.src = p.get("lesson") || "../lessons/08-kimyoviy-element.js";
+      // Darsdagi rasm yo‘llari dars fayliga nisbatan hisoblanadi
+      window.ZARRA.base = new URL(s.src, location.href).href;
       s.onerror = function () {
         document.getElementById("status").textContent = "Dars fayli topilmadi: " + s.src;
         document.getElementById("status").className = "status warn";

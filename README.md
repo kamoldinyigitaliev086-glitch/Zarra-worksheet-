@@ -1,91 +1,120 @@
-# ZARRA worksheet — Kimyo, 7-sinf
+# ZARRA worksheet: Kimyo, 7-sinf
 
-Ikki sahifali A4 worksheet shabloni:
+ZARRA kimyo online platformasi darslari uchun ikki sahifali A4 worksheet shabloni.
+Dizayn `docs/namuna/` papkasidagi ZARRA namunalaridan olingan: logotip, «N-DARS» va
+«7-SINF» belgilari, katta to‘q ko‘k sarlavha, rangli raqamlangan bo‘limlar
+(1 ko‘k, 2 yashil, 3 to‘q sariq, 4 binafsha), rasmli kartochkalar va pastki to‘lqin.
 
 | Sahifa | Mazmuni |
 |---|---|
-| **1-sahifa · Nazariya** | sarlavha, o‘quvchi ma’lumotlari, mavzu, dars maqsadi, nazariya bo‘limlari (matn, ro‘yxat, jadval, ajratilgan qoida), «Yodda tuting», «Bilasizmi?», qaydlar uchun joy |
-| **2-sahifa · Mashqlar** | 5 ta mashq kartochkasi (ball katakchasi bilan) va pastda jami ball |
+| **1-sahifa · Nazariya** | raqamlangan bo‘limlar: ta’rif, kartochkalar, element plitkalari, galereya, jadval, «Muhim!», «Muhim xulosa» |
+| **2-sahifa · Mashqlar** | 5 ta mashq: rasmlar bo‘yicha, moslashtirish, to‘g‘rilash, to‘g‘ri/noto‘g‘ri, jadval, savollar, hayotiy vaziyat |
+
+Tayyor namunalar: `lessons/08-kimyoviy-element.js` va `lessons/06-fizik-va-kimyoviy-hodisalar.js`
+(natijasi `examples/` papkasida).
 
 ## Tuzilishi
 
 ```
 template/
   worksheet.html   – sahifa (brauzerda ochiladi)
-  styles.css       – dizayn: tepadagi :root tokenlari + qat’iy A4 maket
-  render.js        – dars ma’lumotini maketga joylaydi va matnni sig‘diradi
+  styles.css       – dizayn: tepadagi :root tokenlari va qat’iy A4 maket
+  render.js        – dars ma’lumotini maketga joylaydi va sahifaga sig‘diradi
+  assets/logo.png  – (ixtiyoriy) asl ZARRA logotipi; bo‘lsa, avtomatik ishlatiladi
 lessons/
-  01-atom-va-molekula.js – namunaviy dars
-  _shablon.js            – yangi dars uchun bo‘sh shablon
+  _shablon.js      – yangi dars uchun shablon (barcha blok turlari izohi bilan)
+  08-….js, 06-….js – namunaviy darslar
+  img/<dars>/      – dars rasmlari
 scripts/
   export-png.js    – PNG (va PDF) eksporti
+docs/namuna/       – asl dizayn namunalari
 ```
 
-**Mazmun va dizayn alohida saqlanadi.** Dars matni faqat `lessons/*.js` faylida turadi,
-maket esa `template/` ichida. Shuning uchun yangi darsga o‘tishda maketga tegish shart emas.
+Mazmun (`lessons/*.js`) va dizayn (`template/`) alohida saqlanadi. Yangi dars uchun faqat dars faylini yozasiz.
 
 ## Yangi dars qo‘shish
 
-1. `lessons/_shablon.js` dan nusxa oling, masalan: `lessons/02-moddalar.js`.
-2. Qo‘shtirnoq ichidagi matnlarni almashtiring.
-3. Ko‘rish uchun brauzerda oching:
-   `template/worksheet.html?lesson=../lessons/02-moddalar.js`
-   (parametrsiz ochilsa, namunaviy dars ko‘rsatiladi).
+1. `lessons/_shablon.js` dan nusxa oling, masalan `lessons/09-mavzu.js`.
+2. Rasmlarni `lessons/img/09/` papkasiga qo‘ying. Ularning yo‘li dars fayliga nisbatan yoziladi: `img: "img/09/temir.jpg"`.
+3. Matnlarni almashtiring.
+4. Ko‘rish: `template/worksheet.html?lesson=../lessons/09-mavzu.js`.
 
-Matnda ishlatiladigan belgilar:
+Matnda ishlatiladigan belgilar: `**qalin**`, `H_2O` → H₂O, `Fe^3+` → Fe³⁺, `10^{21}`, `___` (bo‘sh joy).
 
-| Yozilishi | Natija |
+### 1-sahifa: bo‘lim bloklari (`theory`)
+
+| `type` | Ko‘rinishi |
 |---|---|
-| `**atom**` | **qalin** matn |
-| `H_2O`, `X_{12}` | pastki indeks: H₂O |
-| `Fe^3+`, `10^{21}` | yuqori indeks: Fe³⁺ |
-| `___` | o‘quvchi yozadigan bo‘sh joy |
+| `def` | oq ramkadagi ta’rif, o‘ngda rasm (`img`, `imgWidth`) |
+| `cards` | rangli sarlavhali kartochkalar: `text`, `list`, `box`, `img`, `imgSide: "right"` |
+| `tiles` | element plitkalari: katta belgi, nom va rasm |
+| `gallery` | rasmlar qatori: `title` (rasm ustida), `caption` (rasm ostida) |
+| `steps` | strelkali jarayon (rasm ➜ rasm ➜ rasm) |
+| `table` | ma’lumot jadvali |
+| `alert` | pushti «Muhim!» qatori |
+| `checklist` | yashil belgili xulosa ro‘yxati |
+| `text` | oddiy paragraf |
 
-Mashq turlari (`type`):
+### 2-sahifa: mashq turlari (`exercises`)
 
-| Turi | Maydonlari |
+| `type` | Ko‘rinishi |
 |---|---|
-| `choice` | `items: [{ q, options: [..] }]`: test, a/b/c/d variantlar |
-| `fill` | `items: ["... ___ ..."]`: gapni to‘ldirish |
-| `match` | `left: [..]`, `right: [..]`: moslashtirish |
-| `table` | `head: [..]`, `rows: [["berilgan"], ..]`: bo‘sh kataklarni o‘quvchi to‘ldiradi |
-| `open` | `questions: [".."]`: ochiq savol va yozish chiziqlari |
+| `images` | raqamli rasmlar va javob kataklari (`caption`, `lines`, `bank`) |
+| `match` | moslashtirish: chapda raqam va katak, o‘ngda A, B, C… |
+| `rewrite` | `fe → [ ]` ko‘rinishida to‘g‘rilash |
+| `truefalse` | to‘g‘ri (T) / noto‘g‘ri (N) kataklari |
+| `table` | to‘ldiriladigan jadval (`rowColors`, `{ text, sub }` sarlavhalar) |
+| `questions` | savollar va chiziqlar (`cols: 2`, `boxed`, `prompts`) |
+| `case` | hayotiy vaziyat: rasm(lar) va javob qatorlari (`layout: stack / side / pairs`, `arrows`) |
+| `choice`, `fill` | test va gapni to‘ldirish |
 
-Ixtiyoriy maydonlar: `points` (ball), `instruction` (ko‘rsatma), `weight` (ortib qolgan
-bo‘sh joyning shu mashqqa beriladigan ulushi, standart qiymati 1), `lines: true` (istalgan
-mashq ostiga yozish chiziqlari) va `minLines` (chiziqlarning eng kam soni).
+Umumiy maydonlar:
+
+| Maydon | Vazifasi |
+|---|---|
+| `title`, `lead` / `instruction` | sarlavha va uning ostidagi izoh |
+| `color` | rangni o‘zgartirish |
+| `number: false` | raqamsiz bo‘lim yoki mashq |
+| `[A, B]` | ikkita bo‘lim yoki mashqni yonma-yon qo‘yish |
+| `span` | yonma-yon turganda kenglik ulushi |
+| `weight` | bo‘sh joy ulushi |
 
 ## Maket nega buzilmaydi
 
-- Sahifa o‘lchami qat’iy: 210 × 297 mm. Sarlavha, mavzu lentasi va footer joyidan siljimaydi.
-- Mazmun maydonidagi barcha o‘lchamlar `em` birligida. Matn sig‘masa, `render.js` uni
-  bir tekis kichraytiradi (eng kami 60% gacha). 2-sahifadagi 5 ta mashqning shrifti doim bir xil bo‘ladi.
-- Mazmun kam bo‘lsa, bo‘sh joyni yozish chiziqlari to‘ldiradi va sahifa to‘liq ko‘rinadi.
-- Mavzu nomi 2 qatordan, mashq sarlavhasi 1 qatordan oshmaydi.
-- Matn 60% da ham sig‘masa, ekranda qizil uzuq chiziqli ramka va ogohlantirish chiqadi,
-  eksport skripti esa `⚠ sig‘madi` deb xabar beradi.
+- Sahifa o‘lchami qat’iy (210 × 297 mm). Sarlavha, logotip va pastki to‘lqin joyidan siljimaydi.
+- Mavzu nomi bir qatorga sig‘maguncha kichrayadi. Juda uzun bo‘lsa, 2 qatorga o‘tadi.
+- Bo‘limlar ichidagi barcha o‘lchamlar `em` birligida. Mazmun ko‘p bo‘lsa, sahifa bir tekis
+  kichraytiriladi (eng kami 60% gacha).
+- Rasmlar o‘z kartochkasini to‘ldiradi (`object-fit: cover`), shuning uchun rasm o‘lchami maketga ta’sir qilmaydi.
+- Rasm berilmasa yoki topilmasa, o‘rnida bo‘sh joy chiziladi. Eksport skripti buni ogohlantiradi.
+- Mazmun kam bo‘lsa, rasmlar va yozish chiziqlari kattalashib, bo‘sh joyni to‘ldiradi.
 
 ## PNG sifatida chiqarish
 
-**1-usul. Skript orqali** (tavsiya etiladi; aniq 300 dpi, A4 = 2481 × 3509 px):
+**1-usul. Skript orqali** (tavsiya etiladi; 300 dpi, A4 = 2481 × 3509 px):
 
 ```bash
-npm install                 # bir marta (Playwright)
-npx playwright install chromium
-node scripts/export-png.js lessons/01-atom-va-molekula.js
-npm run export              # lessons/ dagi barcha darslar → output/
+npm install && npx playwright install chromium     # bir marta
+node scripts/export-png.js lessons/08-kimyoviy-element.js
+npm run export                                      # barcha darslar → output/
 ```
 
-Parametrlar: `--out papka`, `--dpi 300`, `--pdf` (A4 PDF ham chiqaradi), `--strict`
-(matn sig‘masa, xato kodi bilan tugaydi). Natija `output/<slug>-1.png` va
-`output/<slug>-2.png` fayllariga yoziladi. `_` bilan boshlanadigan fayllar eksport qilinmaydi.
+Parametrlar:
 
-**2-usul. Brauzerdan.** `worksheet.html` dagi «PNG · 1-sahifa» va «PNG · 2-sahifa»
-tugmalari (internet kerak). «Chop etish / PDF» tugmasi A4 formatda chop etadi.
+| Parametr | Vazifasi |
+|---|---|
+| `--out papka` | natijalar papkasi |
+| `--dpi 300` | aniqlik |
+| `--pdf` | A4 PDF ham chiqaradi |
+| `--strict` | matn sig‘masa yoki rasm topilmasa, xato kodi bilan tugaydi |
 
-## Dizaynni namunaga moslash
+Natija `<slug>-1.png` va `<slug>-2.png` fayllariga yoziladi.
 
-Ranglar, shriftlar va asosiy o‘lchamlar `template/styles.css` boshidagi `:root` blokida
-joylashgan (`--brand`, `--accent`, `--font-head` va boshqalar). Namunadagi dizaynga
-o‘tkazish uchun shu tokenlarni almashtirish kifoya. Logotip, bezak va ikonkalar
-`template/render.js` boshidagi SVG’larda turadi.
+**2-usul. Brauzerdan.** Sahifadagi «PNG · 1-sahifa», «PNG · 2-sahifa» va «Chop etish / PDF» tugmalari.
+
+## Dizaynni sozlash
+
+- **Ranglar va shriftlar:** `template/styles.css` boshidagi `:root` va `.c-blue`, `.c-green`… bloklari.
+  Asosiy shrift Roboto Condensed, logotip shrifti Poppins.
+- **Logotip:** asl ZARRA logotipini `template/assets/logo.png` nomi bilan qo‘ysangiz, chizilgan logotip o‘rniga o‘sha ishlatiladi.
+- **Pastki yozuvlar:** `meta.footer` («KIMYO ONLINE PLATFORMASI») va `meta.site` («zarra.uz»).

@@ -5,7 +5,7 @@
  *   node scripts/export-png.js lessons/*.js --out output --dpi 300 --pdf
  *
  * Har bir dars uchun: <slug>-1.png (nazariya), <slug>-2.png (mashqlar).
- * --strict : matn sig‘magan bo‘lsa xato bilan tugaydi (kod 2).
+ * --strict : matn sig‘magan yoki rasm topilmagan bo‘lsa xato bilan tugaydi (kod 2).
  */
 const path = require("path");
 const fs = require("fs");
@@ -55,8 +55,9 @@ function parseArgs(argv) {
       failed = true; await page.close(); continue;
     }
 
-    const { report, slug } = await page.evaluate(() => ({
+    const { report, missing, slug } = await page.evaluate(() => ({
       report: window.ZARRA.report,
+      missing: window.ZARRA.missing || [],
       slug: (window.ZARRA.data.meta && window.ZARRA.data.meta.slug) || null,
     }));
     const name = slug || path.basename(file, path.extname(file));
@@ -78,6 +79,10 @@ function parseArgs(argv) {
       console.log(`  ✓ ${path.relative(process.cwd(), p)}`);
     }
 
+    if (missing.length) {
+      console.warn(`  ⚠ rasm topilmadi: ${missing.map(u => decodeURIComponent(u.replace(/^file:\/\//, ""))).join(", ")}`);
+      if (opt.strict) failed = true;
+    }
     const bad = report.filter(r => r.overflow);
     const shrunk = report.filter(r => !r.overflow && r.scale < 1);
     if (shrunk.length) console.log(`  · kichraytirildi: ${shrunk.map(r => `${r.where} (${Math.round(r.scale * 100)}%)`).join(", ")}`);
