@@ -1,0 +1,13 @@
+{
+  "name": "zarra-worksheet",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ZARRA 7-sinf kimyo darslari uchun ikki sahifali A4 worksheet shabloni",
+  "scripts": {
+    "export": "node scripts/export-png.js lessons/*.js --out output",
+    "export:pdf": "node scripts/export-png.js lessons/*.js --out output --pdf"
+  },
+  "devDependencies": {
+    "playwright": "^1.47.0"
+  }
+}

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ZARRA · Kimyo worksheet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="toolbar no-print">
+    <b>ZARRA · Worksheet</b>
+    <span class="status" id="status">Yuklanmoqda…</span>
+    <button type="button" data-png="0">PNG · 1-sahifa</button>
+    <button type="button" data-png="1">PNG · 2-sahifa</button>
+    <button type="button" onclick="window.print()">Chop etish / PDF</button>
+  </div>
+
+  <main id="sheet"></main>
+
+  <script src="render.js"></script>
+  <script>
+    /* Dars faylini tanlash:  worksheet.html?lesson=../lessons/02-mavzu.js
+       Parametrsiz ochilsa — namunaviy dars yuklanadi. */
+    (function () {
+      var p = new URLSearchParams(location.search);
+      if (p.has("export")) document.body.classList.add("export-mode");
+      var s = document.createElement("script");
+      s.src = p.get("lesson") || "../lessons/01-atom-va-molekula.js";
+      s.onerror = function () {
+        document.getElementById("status").textContent = "Dars fayli topilmadi: " + s.src;
+        document.getElementById("status").className = "status warn";
+      };
+      document.body.appendChild(s);
+    })();
+
+    document.addEventListener("zarra:ready", function (e) {
+      var bad = e.detail.filter(function (r) { return r.overflow; });
+      var st = document.getElementById("status");
+      st.textContent = bad.length
+        ? "Diqqat: sig‘magan joylar — " + bad.map(function (r) { return r.where; }).join(", ")
+        : "Tayyor ✓ (matn sig‘di)";
+      st.className = "status" + (bad.length ? " warn" : "");
+    });
+
+    /* Brauzerning o‘zida PNG yuklab olish (html-to-image, ~300 dpi) */
+    document.querySelectorAll("[data-png]").forEach(function (btn) {
+      btn.addEventListener("click", async function () {
+        var idx = +btn.dataset.png;
+        if (!window.htmlToImage) {
+          await new Promise(function (ok, fail) {
+            var s = document.createElement("script");
+            s.src = "https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js";
+            s.onload = ok; s.onerror = fail; document.head.appendChild(s);
+          });
+        }
+        var page = document.querySelectorAll(".page")[idx];
+        var url = await window.htmlToImage.toPng(page, {
+          pixelRatio: 3.125, backgroundColor: "#ffffff",
+          style: { boxShadow: "none" }
+        });
+        var a = document.createElement("a");
+        var slug = (window.ZARRA.data && window.ZARRA.data.meta && window.ZARRA.data.meta.slug) || "zarra-worksheet";
+        a.download = slug + "-" + (idx + 1) + ".png";
+        a.href = url; a.click();
+      });
+    });
+  </script>
+</body>
+</html>

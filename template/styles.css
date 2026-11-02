@@ -1,0 +1,275 @@
+/* =====================================================================
+   ZARRA · Kimyo 7-sinf · A4 worksheet shabloni
+   ---------------------------------------------------------------------
+   DIZAYN TOKENLARI — namuna dizayniga moslash uchun faqat shu blokni
+   o‘zgartiring. Maket (o‘lchamlar, joylashuv) pastdagi qoidalarda
+   qat’iy belgilangan va mazmunga bog‘liq emas.
+   ===================================================================== */
+:root {
+  /* Ranglar */
+  --brand:        #0f766e;   /* asosiy rang (sarlavha, raqamlar) */
+  --brand-dark:   #134e4a;
+  --brand-soft:   #e6f4f1;   /* yengil fon */
+  --accent:       #f59e0b;   /* urg‘u rangi (belgilar, fakt) */
+  --accent-soft:  #fef3c7;
+  --ink:          #1f2937;   /* asosiy matn */
+  --muted:        #64748b;   /* ikkinchi darajali matn */
+  --line:         #cbd5e1;   /* chiziqlar, ramkalar */
+  --paper:        #ffffff;
+
+  /* Shriftlar */
+  --font-body:    "Nunito", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-head:    "Nunito", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+
+  /* Asosiy o‘lchamlar (A4 = 210 × 297 mm) */
+  --page-w:       210mm;
+  --page-h:       297mm;
+  --page-pad:     11mm;
+  --radius:       3mm;
+  --fs-theory:    10.5pt;    /* nazariya matni (avto-kichraytirishdan oldin) */
+  --fs-exercise:  10.5pt;    /* mashq matni */
+}
+
+/* ------------------------------------------------------------------ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body {
+  background: #e5e7eb;
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: 1.4;
+}
+sub, sup { font-size: 0.7em; line-height: 0; }
+
+/* ---------- Ekran uchun panel ---------- */
+.toolbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  padding: 10px 16px; background: #111827; color: #fff; font-size: 14px;
+}
+.toolbar b { margin-right: auto; }
+.toolbar button {
+  font: inherit; cursor: pointer; border: 0; border-radius: 6px;
+  padding: 6px 12px; background: var(--brand); color: #fff;
+}
+.toolbar button:hover { background: var(--brand-dark); }
+.toolbar .status { opacity: .75; font-size: 12px; }
+.toolbar .status.warn { color: #fca5a5; opacity: 1; }
+
+#sheet { display: flex; flex-direction: column; align-items: center; gap: 10mm; padding: 10mm 0; }
+
+/* ---------- A4 sahifa (qat’iy o‘lcham) ---------- */
+.page {
+  width: var(--page-w); height: var(--page-h);
+  padding: var(--page-pad);
+  background: var(--paper);
+  display: flex; flex-direction: column; gap: 3.2mm;
+  overflow: hidden; position: relative;
+  box-shadow: 0 4px 18px rgba(0,0,0,.15);
+}
+.page > * { flex-shrink: 0; }
+
+/* Bezak: burchakdagi molekula naqshi */
+.page__decor {
+  position: absolute; right: -14mm; bottom: -14mm; width: 60mm; height: 60mm;
+  color: var(--brand); opacity: .06; pointer-events: none;
+}
+
+/* ---------- Sarlavha (header) ---------- */
+.ws-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-bottom: 2.5mm; border-bottom: 0.6mm solid var(--brand);
+}
+.brand { display: flex; align-items: center; gap: 2.5mm; }
+.brand__icon { width: 10mm; height: 10mm; color: var(--brand); }
+.brand__name {
+  font-family: var(--font-head); font-weight: 900; font-size: 19pt;
+  letter-spacing: .12em; color: var(--brand); line-height: 1;
+}
+.brand__sub { font-size: 8.5pt; color: var(--muted); font-weight: 700; letter-spacing: .04em; }
+.meta { display: flex; gap: 2mm; }
+.chip {
+  font-size: 8.5pt; font-weight: 800; padding: 1.2mm 3mm; border-radius: 99px;
+  background: var(--brand-soft); color: var(--brand-dark); white-space: nowrap;
+}
+.chip--accent { background: var(--accent-soft); color: #92400e; }
+
+/* ---------- O‘quvchi ma’lumotlari ---------- */
+.student-row { display: grid; grid-template-columns: 3fr 1fr 1.3fr; gap: 5mm; font-size: 9pt; color: var(--muted); }
+.student-row span { display: flex; align-items: flex-end; gap: 2mm; white-space: nowrap; }
+.student-row span::after { content: ""; flex: 1; border-bottom: 0.3mm solid var(--line); height: 1em; }
+
+/* ---------- Mavzu lentasi ---------- */
+.title-band {
+  background: var(--brand); color: #fff; border-radius: var(--radius);
+  padding: 3.5mm 27mm 3.5mm 5mm; position: relative; overflow: hidden;
+}
+.title-band__kicker {
+  font-size: 8pt; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; opacity: .8;
+}
+.title-band h1 {
+  font-family: var(--font-head); font-weight: 900; font-size: 17pt; line-height: 1.15;
+  /* uzun mavzu 2 qatordan oshmaydi */
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.title-band p { font-size: 9.5pt; opacity: .9; margin-top: .5mm;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.title-band__hex { position: absolute; right: 4mm; top: 50%; transform: translateY(-50%);
+  width: 20mm; height: 20mm; color: #fff; opacity: .18; }
+
+/* ---------- Avto-moslashuvchi maydon ----------
+   .fit ichidagi barcha o‘lchamlar em’da; JS --fit koeffitsientini
+   mazmun sig‘guncha kamaytiradi, shuning uchun maket buzilmaydi. */
+.fit {
+  flex: 1 1 0; min-height: 0; overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.fit > * { flex-shrink: 0; }
+.fit.is-overflow { outline: 2px dashed #ef4444; outline-offset: -2px; }
+@media print { .fit.is-overflow { outline: none; } }
+
+/* ================= 1-SAHIFA: NAZARIYA ================= */
+.theory { font-size: calc(var(--fs-theory) * var(--fit, 1)); gap: 0.85em; }
+
+.box { border-radius: var(--radius); padding: 0.75em 1em; }
+.box__title {
+  display: flex; align-items: center; gap: .45em;
+  font-family: var(--font-head); font-weight: 900; font-size: 1.02em;
+  text-transform: uppercase; letter-spacing: .06em; margin-bottom: .35em;
+}
+.box__title i {
+  width: 1.5em; height: 1.5em; border-radius: 50%; display: inline-grid; place-items: center;
+  font-style: normal; font-size: .85em; color: #fff; background: var(--brand);
+}
+
+.goals { background: var(--brand-soft); border-left: 0.9mm solid var(--brand); }
+.goals ul { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: .2em 1.2em; }
+.goals li { padding-left: 1.2em; position: relative; }
+.goals li::before { content: "✓"; position: absolute; left: 0; color: var(--brand); font-weight: 900; }
+
+.section h2 {
+  font-family: var(--font-head); font-weight: 900; font-size: 1.22em; color: var(--brand-dark);
+  display: flex; align-items: center; gap: .5em; margin-bottom: .25em;
+}
+.section h2 .num {
+  min-width: 1.6em; height: 1.6em; border-radius: .4em; display: inline-grid; place-items: center;
+  background: var(--accent); color: #fff; font-size: .8em;
+}
+.section p + p { margin-top: .3em; }
+.section ul { margin: .3em 0 0 1.3em; }
+.section li::marker { color: var(--brand); }
+.highlight {
+  margin-top: .45em; padding: .45em .8em; border-radius: var(--radius);
+  background: var(--accent-soft); border-left: 0.8mm solid var(--accent); font-weight: 700;
+}
+
+table.data { border-collapse: collapse; width: 100%; margin-top: .4em; font-size: .95em; }
+table.data th, table.data td { border: 0.25mm solid var(--line); padding: .3em .6em; text-align: left; }
+table.data th { background: var(--brand); color: #fff; font-weight: 800; }
+table.data tr:nth-child(even) td { background: #f8fafc; }
+
+.bottom-boxes { display: grid; grid-template-columns: 1.35fr 1fr; gap: .9em; }
+.terms { border: 0.4mm solid var(--brand); }
+.terms dl { display: grid; grid-template-columns: auto 1fr; gap: .2em .6em; }
+.terms dt { font-weight: 900; color: var(--brand-dark); }
+.fact { background: var(--accent-soft); }
+.fact .box__title i { background: var(--accent); }
+
+.notes { flex: 1 0 auto; min-height: 4.2em; display: flex; flex-direction: column; }
+.notes .box__title { color: var(--muted); }
+
+/* Yozish uchun chiziqlar (qolgan bo‘sh joyni to‘ldiradi) */
+.lines {
+  --lh: 1.9em;
+  flex: 1 0 auto;
+  min-height: calc(var(--lh) * var(--min-lines, 2));
+  background-image: repeating-linear-gradient(to bottom,
+    transparent 0, transparent calc(var(--lh) - 1px),
+    var(--line) calc(var(--lh) - 1px), var(--line) var(--lh));
+}
+
+/* ================= 2-SAHIFA: MASHQLAR ================= */
+.exercises { gap: 2.6mm; font-size: calc(var(--fs-exercise) * var(--fit, 1)); }
+
+/* Har bir mashq o‘z mazmuni balandligini oladi; ortgan joy
+   weight (--w) bo‘yicha taqsimlanadi, shrift hamma mashqda bir xil. */
+.ex {
+  flex: var(--w, 1) 0 auto;
+  border: 0.35mm solid var(--line); border-radius: var(--radius);
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.ex__head {
+  display: flex; align-items: center; gap: 2.5mm;
+  padding: 1.6mm 3mm; background: var(--brand-soft); flex-shrink: 0;
+}
+.ex__num {
+  width: 7mm; height: 7mm; border-radius: 50%; display: grid; place-items: center;
+  background: var(--brand); color: #fff; font-weight: 900; font-size: 11pt; flex-shrink: 0;
+}
+.ex__title { font-family: var(--font-head); font-weight: 900; font-size: 11pt; color: var(--brand-dark);
+  flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ex__score { font-size: 8.5pt; font-weight: 800; color: var(--muted); white-space: nowrap; }
+.ex__score b { display: inline-block; width: 8mm; border-bottom: 0.3mm solid var(--muted); }
+
+.ex__body { padding: 0.55em 0.9em 0.6em; flex: 1 0 auto; display: flex; flex-direction: column; gap: .45em; }
+.ex__body > * { flex-shrink: 0; }
+.ex__instr { color: var(--muted); font-style: italic; }
+
+/* bo‘sh joy (to‘ldirish uchun) */
+.blank { display: inline-block; min-width: 6em; border-bottom: 0.3mm solid var(--ink); height: 1em; vertical-align: baseline; }
+
+/* test */
+.choice-q + .choice-q { margin-top: .35em; }
+.choice-q .q { font-weight: 700; }
+.options { display: grid; grid-template-columns: repeat(4, 1fr); gap: .15em .8em; margin-top: .15em; }
+.options.cols-2 { grid-template-columns: repeat(2, 1fr); }
+.opt { display: flex; gap: .4em; align-items: baseline; }
+.opt::before {
+  content: attr(data-l); flex-shrink: 0; width: 1.35em; height: 1.35em; border-radius: 50%;
+  border: 0.3mm solid var(--brand); color: var(--brand); font-weight: 800; font-size: .85em;
+  display: inline-grid; place-items: center; transform: translateY(.1em);
+}
+
+/* to‘ldirish */
+ol.fill { margin-left: 1.3em; display: flex; flex-direction: column; gap: .45em; }
+ol.fill li::marker { color: var(--brand); font-weight: 800; }
+
+/* moslash */
+.match { display: grid; grid-template-columns: 1fr 1fr auto; gap: .3em 1.5em; align-items: start; }
+.match ul { list-style: none; display: flex; flex-direction: column; gap: .3em; }
+.match li { display: flex; gap: .5em; align-items: center; padding: .1em .5em; border: 0.25mm dashed var(--line); border-radius: .4em; }
+.match li b { color: var(--brand); }
+.match .answers { display: grid; grid-template-columns: repeat(2, auto); gap: .3em .6em; font-weight: 700; color: var(--muted); }
+.match .answers span { white-space: nowrap; }
+.match .answers span::after { content: ""; display: inline-block; width: 1.6em; border-bottom: 0.3mm solid var(--ink); margin-left: .2em; }
+
+/* jadval */
+table.ex-table { border-collapse: collapse; width: 100%; table-layout: fixed; }
+table.ex-table th, table.ex-table td { border: 0.25mm solid var(--line); padding: .3em .55em; height: 1.85em; text-align: left; }
+table.ex-table th { background: var(--brand-soft); color: var(--brand-dark); font-weight: 800; }
+table.ex-table td.given { font-weight: 700; }
+
+/* ochiq savol */
+.open-q { font-weight: 700; }
+
+/* ---------- Pastki qism (footer) ---------- */
+.ws-footer {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 8pt; color: var(--muted); border-top: 0.3mm solid var(--line); padding-top: 2mm;
+}
+.ws-footer .total { font-weight: 800; color: var(--ink); }
+.ws-footer .total b { display: inline-block; width: 12mm; border-bottom: 0.3mm solid var(--ink); }
+
+/* ---------- Chop etish / eksport ---------- */
+@page { size: A4; margin: 0; }
+@media print {
+  body { background: none; }
+  .no-print { display: none !important; }
+  #sheet { padding: 0; gap: 0; display: block; }
+  .page { box-shadow: none; break-after: page; }
+}
+body.export-mode { background: #fff; }
+body.export-mode .toolbar { display: none; }
+body.export-mode #sheet { padding: 0; gap: 0; }
+body.export-mode .page { box-shadow: none; }
+body.export-mode .fit.is-overflow { outline: none; }
